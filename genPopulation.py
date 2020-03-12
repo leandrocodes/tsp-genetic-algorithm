@@ -21,8 +21,6 @@ def apply_function(ind):
   y = ind["y"]
   return math.sin(math.sqrt(x ** 2 + y ** 2))
 
-
-
 generations = 100
 
 population = generate_population(size = 10, x_bound = (-4, 4), y_bound = (-4, 4))
