@@ -6,4 +6,17 @@ cities = [
     [189, 474, 609, 413, 213, 0]
 ]
 
-print(cities[1][2])
+for city in cities:
+    print(city)
+
+def fitness(city):
+    return 1
+
+def crossover(a, b):
+    return a
+
+def mutate(city):
+    return city
+
+def main(iterations):
+    return True
