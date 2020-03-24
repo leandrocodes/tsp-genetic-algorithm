@@ -1,9 +1,19 @@
 import json
+import random
 
 
-def generate(cities):
-    return True
-
+def generate(cities, individues):
+    cities_list = list(cities.values())
+    cities_list.pop(0)
+    # print(cities_list)
+    # print(random.sample(cities_list, len(cities_list)))
+    population = []
+    
+    for ind in range(individues):
+        population.append(random.sample(cities_list, len(cities_list)))
+    
+    print(population)
+    return population
 
 def fitness(city):
     return 1
@@ -25,7 +35,7 @@ if __name__ == "__main__":
     json_file = open("graph.json", encoding="utf8")
     graph = json.load(json_file)
 
-    graph_encoded = {}
+    nodes_encoded = {}
     edges_enconded = {}
 
     for key in graph:
@@ -33,14 +43,16 @@ if __name__ == "__main__":
             # print(graph[key])
             count = 0
             for node in graph[key]:
-                graph_encoded[node] = count
+                nodes_encoded[node] = count
                 count += 1
 
     for key in graph:
         if (key == "edges"):
             for edge in graph[key]:
-                edges_enconded[graph_encoded[edge[0]], graph_encoded[edge[1]]] =  edge[2]
+                edges_enconded[nodes_encoded[edge[0]], nodes_encoded[edge[1]]] =  edge[2]
 
 
-    # print(json.dumps(graph_encoded, indent=4, ensure_ascii=False))
-    print(edges_enconded)
+    # print(json.dumps(nodes_encoded, indent=4, ensure_ascii=False))
+    # print(edges_enconded)
+
+    generate(nodes_encoded, 10)
