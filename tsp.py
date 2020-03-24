@@ -1,7 +1,6 @@
 import json
 import random
 
-
 def generate(cities, individues):
     cities_list = list(cities.values())
     cities_list.pop(0)
@@ -12,12 +11,14 @@ def generate(cities, individues):
     for ind in range(individues):
         population.append(random.sample(cities_list, len(cities_list)))
     
-    print(population)
+    # print(population)
     return population
 
-def fitness(city):
-    return 1
-
+def fitness(edges, population):
+    for crom in population:
+        temp = [0] + crom + [0]
+        for i in range(len(temp)-1):
+            print(temp[i], temp[i+1])
 
 def crossover(a, b):
     return a
@@ -55,4 +56,5 @@ if __name__ == "__main__":
     # print(json.dumps(nodes_encoded, indent=4, ensure_ascii=False))
     # print(edges_enconded)
 
-    generate(nodes_encoded, 10)
+    population = generate(nodes_encoded, 10)
+    fitness(edges_enconded, population)
