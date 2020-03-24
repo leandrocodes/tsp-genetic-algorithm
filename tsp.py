@@ -20,15 +20,16 @@ def fitness(edges, population):
     for crom in population:
         fit = 0
         temp = [0] + crom + [0]
-        print(temp)
+        # print(temp)
         for i in range(len(temp)-1):
             edge = (temp[i], temp[i+1])
             if (edge not in edges.keys()):
                 edge = (temp[i+1], temp[i])
             
             fit += edges[edge]
-
-        print(fit)
+        
+        # print(fit)
+        return fit
 
 def crossover(a, b):
     return a
@@ -67,4 +68,5 @@ if __name__ == "__main__":
     # print(edges_enconded)
 
     population = generate(nodes_encoded, 10)
-    fitness(edges_enconded, population)
+    fit = fitness(edges_enconded, population)
+    print(population, fit)
