@@ -1,0 +1,87 @@
+{
+    "nodes": [
+        "Campo Grande",
+        "Bonito",
+        "Corumbá",
+        "Dourados",
+        "Camapuã",
+        "Água Clara"
+    ],
+    "edges": [
+        [
+            "Bonito",
+            "Campo Grande",
+            325
+        ],
+        [
+            "Corumbá",
+            "Campo Grande",
+            420
+        ],
+        [
+            "Corumbá",
+            "Bonito",
+            335
+        ],
+        [
+            "Dourados",
+            "Campo Grande",
+            230
+        ],
+        [
+            "Dourados",
+            "Bonito",
+            270
+        ],
+        [
+            "Dourados",
+            "Corumbá",
+            588
+        ],
+        [
+            "Camapuã",
+            "Campo Grande",
+            143
+        ],
+        [
+            "Camapuã",
+            "Bonito",
+            285
+        ],
+        [
+            "Camapuã",
+            "Corumbá",
+            563
+        ],
+        [
+            "Camapuã",
+            "Dourados",
+            373
+        ],
+        [
+            "Água Clara",
+            "Campo Grande",
+            189
+        ],
+        [
+            "Água Clara",
+            "Bonito",
+            474
+        ],
+        [
+            "Água Clara",
+            "Corumbá",
+            609
+        ],
+        [
+            "Água Clara",
+            "Dourados",
+            413
+        ],
+        [
+            "Água Clara",
+            "Camapuã",
+            213
+        ]
+    ]
+}
