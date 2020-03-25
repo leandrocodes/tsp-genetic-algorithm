@@ -27,13 +27,27 @@ def getFitness(edges, population):
                 edge = (temp[i+1], temp[i])
             
             fit += edges[edge]
-        fitness.append((crom, fit))
+        fitness.append((crom, 1/fit))
     
     # print(fitness)
     return fitness
 
 def selection(fitPopulation):
-    selPopulation = 0
+    selPopulation = []
+    sum_fit = sum(list(map(lambda fit: fit[1], fitPopulation)))
+    p = [ pop[1]/sum_fit for pop in fitPopulation ]
+    
+    while len(selPopulation) < len(fitPopulation):
+        soma = 0
+        pointer = random.random()
+
+        for i in range(len(p)):
+            soma += p[i]
+            if (pointer < soma):
+                selPopulation.append(fitPopulation[i][0])
+                break
+    
+    print(selPopulation)
     return selPopulation
 
 def crossover(prob, selPopulation):
@@ -112,4 +126,3 @@ if __name__ == "__main__":
     fitPopulation = getFitness(edges_enconded, population)
     selPopulation = selection(fitPopulation)
     cross = crossover(0.7, fitPopulation)
-    print(fitPopulation, cross)
