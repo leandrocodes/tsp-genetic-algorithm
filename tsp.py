@@ -1,6 +1,6 @@
 import json
 import random
-
+from itertools import combinations
 
 def generate(cities, individues):
     cities_list = list(cities.values())
@@ -15,8 +15,8 @@ def generate(cities, individues):
     # print(population)
     return population
 
-
-def fitness(edges, population):
+def getFitness(edges, population):
+    fitness = []
     for crom in population:
         fit = 0
         temp = [0] + crom + [0]
@@ -27,20 +27,61 @@ def fitness(edges, population):
                 edge = (temp[i+1], temp[i])
             
             fit += edges[edge]
-        
-        # print(fit)
-        return fit
+        fitness.append((crom, fit))
+    
+    # print(fitness)
+    return fitness
 
-def crossover(a, b):
-    return a
+def selection(fitPopulation):
+    selPopulation = 0
+    return selPopulation
+
+def crossover(prob, selPopulation):
+    cross_pop = []
+    count = 0
+    while len(cross_pop) != len(selPopulation):
+        for indi in selPopulation:
+            for comb in combinations(selPopulation, 2):
+                if(random.random() <= prob):
+                    if (count == 2): break
+                    cut1 = random.randint(1, 4)
+                    cut2 = random.randint(1, 4)
+                    ind1, ind2 = comb
+                    temp1 = ind1[0][:cut1]
+                    temp2 = ind2[0][cut2:]
+                    
+                    for gene in temp2:
+                        if(gene not in temp1):
+                            temp1.append(gene) 
+                    
+                    while len(temp1) < 5:
+                        for gene in ind2[0]:
+                            if(gene not in temp1):
+                                temp1.append(gene) 
+
+                    for gene in temp1:
+                        if(gene not in temp2):
+                            temp2.append(gene) 
+                    
+                    while len(temp2) < 5:
+                        for gene in ind1[0]:
+                            if(gene not in temp2):
+                                temp2.append(gene) 
+                            
+                    # print(ind1[0], ind2[0])
+                    count += 1
+                    # print(temp1, temp2)
+                    cross_pop.append(temp1)
+                    cross_pop.append(temp2)
+        
+        cross_pop.append(indi)
+    
+    return cross_pop
+        
 
 
 def mutate(city):
     return city
-
-
-def main(iterations):
-    return True
 
 
 if __name__ == "__main__":
@@ -68,5 +109,7 @@ if __name__ == "__main__":
     # print(edges_enconded)
 
     population = generate(nodes_encoded, 10)
-    fit = fitness(edges_enconded, population)
-    print(population, fit)
+    fitPopulation = getFitness(edges_enconded, population)
+    selPopulation = selection(fitPopulation)
+    cross = crossover(0.7, fitPopulation)
+    print(fitPopulation, cross)
