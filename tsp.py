@@ -57,41 +57,44 @@ def selection(fitPopulation):
 def crossover(prob, selPopulation):
     cross_pop = []
     count = 0
+    didComb = False
     while len(cross_pop) != len(selPopulation):
         for indi in selPopulation:
-            for comb in combinations(selPopulation, 2):
-                if(random.random() <= prob):
-                    if (count == 2):
-                        break
-                    cut1 = random.randint(1, 4)
-                    cut2 = random.randint(1, 4)
-                    ind1, ind2 = comb
-                    temp1 = ind1[0][:cut1]
-                    temp2 = ind2[0][cut2:]
+            if not didComb:
+                for comb in combinations(selPopulation, 2):
+                    if(random.random() <= prob):
+                        if (count == 2):
+                            didComb = True
+                            break
+                        cut1 = random.randint(1, 4)
+                        cut2 = random.randint(1, 4)
+                        ind1, ind2 = comb
+                        temp1 = ind1[0][:cut1]
+                        temp2 = ind2[0][cut2:]
 
-                    for gene in temp2:
-                        if(gene not in temp1):
-                            temp1.append(gene)
-
-                    while len(temp1) < 5:
-                        for gene in ind2[0]:
+                        for gene in temp2:
                             if(gene not in temp1):
                                 temp1.append(gene)
 
-                    for gene in temp1:
-                        if(gene not in temp2):
-                            temp2.append(gene)
+                        while len(temp1) < 5:
+                            for gene in ind2[0]:
+                                if(gene not in temp1):
+                                    temp1.append(gene)
 
-                    while len(temp2) < 5:
-                        for gene in ind1[0]:
+                        for gene in temp1:
                             if(gene not in temp2):
                                 temp2.append(gene)
 
-                    # print(ind1[0], ind2[0])
-                    count += 1
-                    # print(temp1, temp2)
-                    cross_pop.append(temp1)
-                    cross_pop.append(temp2)
+                        while len(temp2) < 5:
+                            for gene in ind1[0]:
+                                if(gene not in temp2):
+                                    temp2.append(gene)
+
+                        # print(ind1[0], ind2[0])
+                        count += 1
+                        # print(temp1, temp2)
+                        cross_pop.append(temp1)
+                        cross_pop.append(temp2)
 
         cross_pop.append(indi[0])
 
@@ -141,8 +144,8 @@ if __name__ == "__main__":
 
     # print(json.dumps(nodes_encoded, indent=4, ensure_ascii=False))
     # print(edges_enconded)
-
-    population = generate(nodes_encoded, 10)
+    n = 1000
+    population = generate(nodes_encoded, n)
     population = getFitness(edges_enconded, population)
 
     minimal = 700000
@@ -154,8 +157,10 @@ if __name__ == "__main__":
 
     print(f"Melhor da primeira: {best_one}")
     ##
-
+    count = 0
     for i in range(1, 101):
+        if (count == int(n/2)):
+            break
         population = selection(population)
         population = getFitness(edges_enconded, population)
 
@@ -169,6 +174,10 @@ if __name__ == "__main__":
             if(minimal > 1/pop[1]):
                 minimal = 1/pop[1]
                 best = pop[0], round(1/pop[1]), i
+                count = 0
+            else:
+                count += 1
+    
         
     
     print(f"Melhor de todos: {best}")
