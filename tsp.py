@@ -2,6 +2,7 @@ import json
 import random
 from itertools import combinations
 
+
 def generate(cities, individues):
     cities_list = list(cities.values())
     cities_list.pop(0)
@@ -15,6 +16,7 @@ def generate(cities, individues):
     # print(population)
     return population
 
+
 def getFitness(edges, population):
     fitness = []
     for crom in population:
@@ -25,18 +27,19 @@ def getFitness(edges, population):
             edge = (temp[i], temp[i+1])
             if (edge not in edges.keys()):
                 edge = (temp[i+1], temp[i])
-            
+
             fit += edges[edge]
         fitness.append((crom, 1/fit))
-    
+
     # print(fitness)
     return fitness
+
 
 def selection(fitPopulation):
     selPopulation = []
     sum_fit = sum(list(map(lambda fit: fit[1], fitPopulation)))
-    p = [ pop[1]/sum_fit for pop in fitPopulation ]
-    
+    p = [pop[1]/sum_fit for pop in fitPopulation]
+
     while len(selPopulation) < len(fitPopulation):
         soma = 0
         pointer = random.random()
@@ -46,9 +49,10 @@ def selection(fitPopulation):
             if (pointer < soma):
                 selPopulation.append(fitPopulation[i][0])
                 break
-    
+
     # print(selPopulation)
     return selPopulation
+
 
 def crossover(prob, selPopulation):
     cross_pop = []
@@ -57,47 +61,47 @@ def crossover(prob, selPopulation):
         for indi in selPopulation:
             for comb in combinations(selPopulation, 2):
                 if(random.random() <= prob):
-                    if (count == 2): break
+                    if (count == 2):
+                        break
                     cut1 = random.randint(1, 4)
                     cut2 = random.randint(1, 4)
                     ind1, ind2 = comb
                     temp1 = ind1[0][:cut1]
                     temp2 = ind2[0][cut2:]
-                    
+
                     for gene in temp2:
                         if(gene not in temp1):
-                            temp1.append(gene) 
-                    
+                            temp1.append(gene)
+
                     while len(temp1) < 5:
                         for gene in ind2[0]:
                             if(gene not in temp1):
-                                temp1.append(gene) 
+                                temp1.append(gene)
 
                     for gene in temp1:
                         if(gene not in temp2):
-                            temp2.append(gene) 
-                    
+                            temp2.append(gene)
+
                     while len(temp2) < 5:
                         for gene in ind1[0]:
                             if(gene not in temp2):
-                                temp2.append(gene) 
-                            
+                                temp2.append(gene)
+
                     # print(ind1[0], ind2[0])
                     count += 1
                     # print(temp1, temp2)
                     cross_pop.append(temp1)
                     cross_pop.append(temp2)
-        
+
         cross_pop.append(indi[0])
-    
+
     return cross_pop
-        
 
 
 def mutate(prob, crossPopulation):
     list_index = list(range(len(crossPopulation[0][0])))
-    ditMutate = False
-    print(list_index)
+    didMutate = False
+    # print(list_index)
     for i in range(len(crossPopulation)):
         if (prob >= random.random()):
             x, y = random.sample(list_index, k=2)
@@ -112,6 +116,7 @@ def mutate(prob, crossPopulation):
             crossPopulation[i] = crossPopulation[i][0]
 
     return crossPopulation
+
 
 if __name__ == "__main__":
     json_file = open("graph.json", encoding="utf8")
@@ -138,14 +143,32 @@ if __name__ == "__main__":
     # print(edges_enconded)
 
     population = generate(nodes_encoded, 10)
-    fitPopulation = getFitness(edges_enconded, population)
+    population = getFitness(edges_enconded, population)
+
+    minimal = 700000
+    best = None
+    for pop in population:
+        if(minimal > 1/pop[1]):
+            minimal = 1/pop[1]
+            best_one = pop[0], round(1/pop[1]), 0
+
+    print(f"Melhor da primeira: {best_one}")
     ##
 
-    for i in range(100):
-        
+    for i in range(1, 101):
+        population = selection(population)
+        population = getFitness(edges_enconded, population)
 
-    # selPopulation = selection(fitPopulation)
-    # selPopulation = getFitness(edges_enconded, selection(fitPopulation))
-    # cross = crossover(0.7, selPopulation)
-    # cross = getFitness(edges_enconded, cross)
-    # mutatePop = mutate(0.3, cross)
+        population = crossover(0.7, population)
+        population = getFitness(edges_enconded, population)
+
+        population = mutate(0.03, population)
+        population = getFitness(edges_enconded, population)
+
+        for pop in population:
+            if(minimal > 1/pop[1]):
+                minimal = 1/pop[1]
+                best = pop[0], round(1/pop[1]), i
+        
+    
+    print(f"Melhor de todos: {best}")
