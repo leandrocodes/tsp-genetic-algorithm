@@ -47,7 +47,7 @@ def selection(fitPopulation):
                 selPopulation.append(fitPopulation[i][0])
                 break
     
-    print(selPopulation)
+    # print(selPopulation)
     return selPopulation
 
 def crossover(prob, selPopulation):
@@ -88,15 +88,30 @@ def crossover(prob, selPopulation):
                     cross_pop.append(temp1)
                     cross_pop.append(temp2)
         
-        cross_pop.append(indi)
+        cross_pop.append(indi[0])
     
     return cross_pop
         
 
 
-def mutate(city):
-    return city
+def mutate(prob, crossPopulation):
+    list_index = list(range(len(crossPopulation[0][0])))
+    ditMutate = False
+    print(list_index)
+    for i in range(len(crossPopulation)):
+        if (prob >= random.random()):
+            x, y = random.sample(list_index, k=2)
+            temp = crossPopulation[i][0].copy()
+            tempx, tempy = temp[x], temp[y]
+            temp[x], temp[y] = tempy, tempx
+            didMutate = True
+        if (didMutate):
+            crossPopulation[i] = temp
+            didMutate = False
+        else:
+            crossPopulation[i] = crossPopulation[i][0]
 
+    return crossPopulation
 
 if __name__ == "__main__":
     json_file = open("graph.json", encoding="utf8")
@@ -124,5 +139,13 @@ if __name__ == "__main__":
 
     population = generate(nodes_encoded, 10)
     fitPopulation = getFitness(edges_enconded, population)
-    selPopulation = selection(fitPopulation)
-    cross = crossover(0.7, fitPopulation)
+    ##
+
+    for i in range(100):
+        
+
+    # selPopulation = selection(fitPopulation)
+    # selPopulation = getFitness(edges_enconded, selection(fitPopulation))
+    # cross = crossover(0.7, selPopulation)
+    # cross = getFitness(edges_enconded, cross)
+    # mutatePop = mutate(0.3, cross)
